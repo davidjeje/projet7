@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mobile index{% endblock %}
+
+{% block body %}
+    <h1>Mobile index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Screen</th>
+                <th>Design</th>
+                <th>Colour</th>
+                <th>Android</th>
+                <th>Processor</th>
+                <th>Ram</th>
+                <th>Camera</th>
+                <th>Storage</th>
+                <th>Drums</th>
+                <th>Sim_card</th>
+                <th>Compatibility</th>
+                <th>Sav</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mobile in mobiles %}
+            <tr>
+                <td>{{ mobile.id }}</td>
+                <td>{{ mobile.name }}</td>
+                <td>{{ mobile.screen }}</td>
+                <td>{{ mobile.design }}</td>
+                <td>{{ mobile.colour }}</td>
+                <td>{{ mobile.android }}</td>
+                <td>{{ mobile.processor }}</td>
+                <td>{{ mobile.ram }}</td>
+                <td>{{ mobile.camera }}</td>
+                <td>{{ mobile.storage }}</td>
+                <td>{{ mobile.drums }}</td>
+                <td>{{ mobile.simCard }}</td>
+                <td>{{ mobile.compatibility }}</td>
+                <td>{{ mobile.sav }}</td>
+                <td>
+                    <a href="{{ path('mobile_show', {'id': mobile.id}) }}">show</a>
+                    <a href="{{ path('mobile_edit', {'id': mobile.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="15">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('mobile_new') }}">Create new</a>
+{% endblock %}
