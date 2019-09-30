@@ -10,7 +10,7 @@ use Hateoas\Configuration\Annotation as Hateoas;
  * @ORM\Entity(repositoryClass="App\Repository\MobileRepository")
  * 
  * @Hateoas\Relation(
- *      "self_mobile",
+ *      "self",
  *      href = @Hateoas\Route(
  *          "mobile_show",
  *          absolute = true,
@@ -18,12 +18,35 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *      )
  * )
  * @Hateoas\Relation(
- *      "all_mobile",
+ *      "list",
  *      href = @Hateoas\Route(
  *          "mobile_all",
  *          absolute = true
  *      )
  * )
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "user_show",
+ *          absolute = true,
+ *          parameters = { "id" = "expr(object.getId())" }
+ *      )
+ * )
+ * @Hateoas\Relation(
+ *      "list",
+ *      href = @Hateoas\Route(
+ *          "user_all",
+ *          absolute = true
+ *      )
+ * )
+ * @Hateoas\Relation(
+ *      "create",
+ *      href = @Hateoas\Route(
+ *          "user_new",
+ *          absolute = true
+ *      )
+ * )
+ 
  */
 class Mobile
 {
@@ -72,7 +95,7 @@ class Mobile
     private $ram;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text", length=255)
      */
     private $camera;
 
@@ -91,7 +114,7 @@ class Mobile
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $sim_card;
+    private $simCard;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -231,12 +254,12 @@ class Mobile
 
     public function getSimCard(): ?string
     {
-        return $this->sim_card;
+        return $this->simCard;
     }
 
-    public function setSimCard(string $sim_card): self
+    public function setSimCard(string $simCard): self
     {
-        $this->sim_card = $sim_card;
+        $this->simCard = $simCard;
 
         return $this;
     }

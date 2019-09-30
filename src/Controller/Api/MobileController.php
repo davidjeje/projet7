@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Entity\Mobile;
 use App\Form\MobileType;
@@ -11,13 +11,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\Controller\FOSRestController;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+//use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
-//use App\Exception\ResourceValidationException;
+use App\Exception\ResourceValidationException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Nelmio\ApiDocBundle\Annotation as Doc;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Swagger\Annotations as SWG;
 
 
 class MobileController extends FOSRestController
@@ -25,24 +31,27 @@ class MobileController extends FOSRestController
     
     /**
      *@Get(
-     *     path = "/allMobille",
+     *     path = "/mobiles/",
      *     name = "mobile_all",
      *     
      * )
      *@View
+     * @IsGranted("ROLE_USER")
+     *
+     * 
      */
-    public function index(MobileRepository $mobileRepository)
+    public function getMobiles(MobileRepository $mobileRepository)
     {
         return $mobileRepository->findAll();
-        /*return $this->render('mobile/index.html.twig', [
-            'mobiles' => $mobileRepository->findAll(),
-        ]);*/
+        /*$repository = $this->getDoctrine()->getRepository(Song::class);
+        $songs = $repository->findAll();
+        return $this->handleView($this->view($songs));*/
     }
 
     
     /**
     *@Post(
-    *   path ="/new", 
+    *   path ="/mobiles/", 
     *   name = "mobile_new"
     * )
     *@View(StatusCode=201)
@@ -52,8 +61,18 @@ class MobileController extends FOSRestController
     *{
     *   "validator"={ "groups"="Create" }
     *})
+    *@IsGranted("ROLE_SUPER_ADMIN")
+    *     requirements={
+    *         {
+    *             "name"="id",
+    *             "dataType"="integer",
+    *             "requirements"="\d+",
+    *             "description"="The article unique identifier."
+    *         }
+    *     }
+    * )
     */  
-    public function new(Mobile $mobile, ConstraintViolationList $violations)
+    public function createMobiles(Mobile $mobile, ConstraintViolationList $violations)
     {
         //dump($mobile); die;
         /*$errors = $this->get('validator')->validate($mobile);
@@ -62,10 +81,21 @@ class MobileController extends FOSRestController
         {
             return $this->view($errors, Response::HTTP_BAD_REQUEST);
         }*/
+
         if (count($violations)) 
         {
             return $this->view($violations, Response::HTTP_BAD_REQUEST);
         }
+        /*if (count($violations)) 
+        {
+            $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
+            foreach ($violations as $violation) 
+            {
+                $message .= sprintf("Champs %s: %s ", $violation->getPropertyPath(), $violation->getMessage());
+            }
+
+            throw new ResourceValidationException($message);
+        }*/
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($mobile);
         $entityManager->flush();
@@ -80,51 +110,16 @@ class MobileController extends FOSRestController
     
     /**
      *@Get(
-     *     path = "/mobile/{id}",
+     *     path = "/mobiles/{id}",
      *     name = "mobile_show",
      *     requirements = {"id"="\d+"}
      * )
      *@View
+     *@IsGranted("ROLE_USER")
      */
-    public function show(Mobile $mobile)
+    public function getMobile(Mobile $mobile)
     {
-        return $mobile;
-       /* return $this->render('mobile/show.html.twig', [
-            'mobile' => $mobile,
-        ]);*/
+        return $mobile;   
     }
 
-    /**
-     * @Route("/{id}/edit", name="mobile_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Mobile $mobile): Response
-    {
-        $form = $this->createForm(MobileType::class, $mobile);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('mobile_index');
-        }
-
-        return $this->render('mobile/edit.html.twig', [
-            'mobile' => $mobile,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="mobile_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, Mobile $mobile): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$mobile->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($mobile);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('mobile_index');
-    }
 }
