@@ -21,7 +21,6 @@ use FOS\RestBundle\Controller\FOSRestController;
 class ClientController extends AbstractFOSRestController
 {
 
-    
 
     /**
      * @Route("/login", name="app_login")

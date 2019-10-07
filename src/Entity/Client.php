@@ -128,7 +128,7 @@ class Client implements UserInterface
      *
      * @see UserInterface
      */
-    abstract function getUsername(): string
+    public function getUsername(): string
     {
         return (string)$this->email;
     }
@@ -136,14 +136,14 @@ class Client implements UserInterface
     /**
      * @see UserInterface
      */
-    abstract function getRoles(): array
+    public function getRoles(): array
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
         return array_unique($roles);
     }
-    abstract function setRoles(array $roles): self
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
         return $this;
@@ -152,7 +152,7 @@ class Client implements UserInterface
     /**
      * @see UserInterface
      */
-    abstract function getSalt()
+    public function getSalt()
     {
         return null;
     }
@@ -160,7 +160,7 @@ class Client implements UserInterface
     /**
      * @see UserInterface
      */
-    abstract function eraseCredentials()
+    public function eraseCredentials()
     {
         return null;
     }
