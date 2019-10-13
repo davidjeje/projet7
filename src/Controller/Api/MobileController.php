@@ -15,8 +15,8 @@ use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use FOS\RestBundle\Controller\FOSRestController;
-//use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use App\Exception\ResourceValidationException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -26,18 +26,18 @@ use Nelmio\ApiDocBundle\Annotation\Security;
 use Swagger\Annotations as SWG;
 
 
-class MobileController extends FOSRestController
+class MobileController extends AbstractFOSRestController
 {
     
     /**
      *@Get(
-     *     path = "/mobiles/",
+     *     path = "/api/mobiles/",
      *     name = "mobile_all",
      *     
      * )
      *@View
-     * @IsGranted("ROLE_USER")
-     *
+     * 
+     *@IsGranted("ROLE_USER")
      * 
      */
     public function getMobiles(MobileRepository $mobileRepository)
@@ -51,7 +51,7 @@ class MobileController extends FOSRestController
     
     /**
     *@Post(
-    *   path ="/mobiles/", 
+    *   path ="/api/mobiles/", 
     *   name = "mobile_new"
     * )
     *@View(StatusCode=201)
@@ -62,14 +62,8 @@ class MobileController extends FOSRestController
     *   "validator"={ "groups"="Create" }
     *})
     *@IsGranted("ROLE_SUPER_ADMIN")
-    *     requirements={
-    *         {
-    *             "name"="id",
-    *             "dataType"="integer",
-    *             "requirements"="\d+",
-    *             "description"="The article unique identifier."
-    *         }
-    *     }
+    *     
+    *     
     * )
     */  
     public function createMobiles(Mobile $mobile, ConstraintViolationList $violations)
@@ -110,7 +104,7 @@ class MobileController extends FOSRestController
     
     /**
      *@Get(
-     *     path = "/mobiles/{id}",
+     *     path = "/api/mobiles/{id}",
      *     name = "mobile_show",
      *     requirements = {"id"="\d+"}
      * )

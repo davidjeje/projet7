@@ -10,6 +10,7 @@ fos_rest:
         formats: { json: true, xml: false, rss: false }
         view_response_listener: true
     exception:
+        exception_controller: 'fos_rest.exception.controller:showAction'
         enabled: true
         codes:
            { App\Exception\ResourceValidationException: 400 }

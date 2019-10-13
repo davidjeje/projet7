@@ -15,7 +15,20 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Validator\ConstraintViolationList;
+use App\Exception\ResourceValidationException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Nelmio\ApiDocBundle\Annotation as Doc;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Swagger\Annotations as SWG;
 
 
 class ClientController extends AbstractFOSRestController
@@ -44,73 +57,103 @@ class ClientController extends AbstractFOSRestController
 
 
     /**
-     * @Route("/", name="client_index", methods={"GET"})
+     *@Get(
+     *     path = "/api/clients/",
+     *     name = "client_all",
+     *     
+     * )
+     *@View
+     * 
+     *@IsGranted("ROLE_SUPER_ADMIN")
+     * 
      */
-    /*public function index(ClientRepository $clientRepository): Response
+    public function getClientes(ClientRepository $clientRepository)
     {
+        return $clientRepository->findAll();
+    }
 
-        return $this->render('client/index.html.twig', [
-            'clients' => $clientRepository->findAll(),
+        /**
+    *@Post(
+    *   path ="/api/clients/", 
+    *   name = "client_new"
+    * )
+    *@View(StatusCode=201)
+    *@ParamConverter("client", 
+    *converter="fos_rest.request_body", 
+    *options=
+    *{
+    *   "validator"={ "groups"="Create" }
+    *})
+    *@IsGranted("ROLE_USER")
+    *     requirements={
+    *         {
+    *             "name"="id",
+    *             "dataType"="integer",
+    *             "requirements"="\d+",
+    *             "description"="The client unique identifier."
+    *         }
+    *     }
+    * )
+    */  
+    public function addClients(Client $client, ConstraintViolationList $violations)
+    {
+        //dump($mobile); die;
+        /*$errors = $this->get('validator')->validate($mobile);
+
+        if (count($errors)) 
+        {
+            return $this->view($errors, Response::HTTP_BAD_REQUEST);
+        }*/
+
+        if (count($violations)) 
+        {
+            return $this->view($violations, Response::HTTP_BAD_REQUEST);
+        }
+        /*if (count($violations)) 
+        {
+            $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
+            foreach ($violations as $violation) 
+            {
+                $message .= sprintf("Champs %s: %s ", $violation->getPropertyPath(), $violation->getMessage());
+            }
+
+            throw new ResourceValidationException($message);
+        }*/
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($client);
+        $entityManager->flush();
+        
+        return $this->view($client, 
+            Response::HTTP_CREATED, 
+            ['Location' => $this->generateUrl('client_new', ['id' => $client->getId(), UrlGeneratorInterface::ABSOLUTE_URL])
         ]);
+       
     }
 
     /**
-     * @Route("/new", name="client_new", methods={"GET","POST"})
+     *@Get(
+     *     path = "/api/clients/{id}",
+     *     name = "client_show",
+     *     requirements = {"id"="\d+"}
+     * )
+     *@View
+     *@IsGranted("ROLE_SUPER_ADMIN")
      */
-    /*public function new(Request $request): Response
+    public function getClient(Client $client)
     {
-        $client = new Client();
-        $form = $this->createForm(ClientType::class, $client);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($client);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('client_index');
-        }
-
-        return $this->render('client/new.html.twig', [
-            'client' => $client,
-            'form' => $form->createView(),
-        ]);
-    }*/
+        return $client;   
+    }
 
     /**
-     * @Route("/{id}", name="client_show", methods={"GET"})
+     *@Delete(
+     *     path = "/api/clients/{id}",
+     *     name = "client_delete",
+     *     requirements = {"id"="\d+"}
+     * )
+     *@View
+     *@IsGranted("ROLE_SUPER_ADMIN")
      */
-    /*public function show(Client $client): Response
-    {
-        return $this->render('client/show.html.twig', [
-            'client' => $client,
-        ]);
-    }*/
-
-    /**
-     * @Route("/{id}/edit", name="client_edit", methods={"GET","POST"})
-     */
-    /*public function edit(Request $request, Client $client): Response
-    {
-        $form = $this->createForm(ClientType::class, $client);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('client_index');
-        }
-
-        return $this->render('client/edit.html.twig', [
-            'client' => $client,
-            'form' => $form->createView(),
-        ]);
-    }*/
-
-    /**
-     * @Route("/{id}", name="client_delete", methods={"DELETE"})
-     */
-    /*public function delete(Request $request, Client $client): Response
+    public function delete(Client $client)
     {
         if ($this->isCsrfTokenValid('delete'.$client->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -118,6 +161,6 @@ class ClientController extends AbstractFOSRestController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('client_index');
-    }*/
+        //return $this->redirectToRoute('client_index');
+    }
 }

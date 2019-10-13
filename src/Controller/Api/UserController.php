@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Entity\User;
 use App\Form\UserType;
@@ -29,7 +29,7 @@ class UserController extends AbstractFOSRestController
 {
     /**
      *@Get(
-     *     path = "/api/users/",
+     *     path = "/api/custom/",
      *     name = "user_all",
      *     
      * )
@@ -104,24 +104,5 @@ class UserController extends AbstractFOSRestController
         return $user;  
     }
 
-    /**
-     *@Delete(
-     *     path = "/api/users/{id}",
-     *     name = "user_delete",
-     *     requirements = {"id"="\d+"}
-     * )
-     *@View
-     *@IsGranted("ROLE_SUPER_ADMIN")
-     */
-    public function deleteUser(User $user)
-    {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) 
-        {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($user);
-            $entityManager->flush();
-        }
-
-        return $user; // je dois retourner un message qui informe que la suppression c'est bien passé.
-    }
+    
 }
