@@ -29,10 +29,9 @@ class UserController extends AbstractFOSRestController
 {
     /**
      *@Get(
-     *     path = "/api/users/",
+     *     path = "/api/users",
      *     name = "user_all",
-     *     
-     * )
+     *)
      *@View
      *@IsGranted("ROLE_USER")
      */
@@ -46,7 +45,6 @@ class UserController extends AbstractFOSRestController
     *   path ="/api/users/", 
     *   name = "user_new"
     * )
-    *@View(StatusCode=201)
     *@ParamConverter("user", 
     *converter="fos_rest.request_body", 
     *options=
@@ -101,27 +99,31 @@ class UserController extends AbstractFOSRestController
      */
     public function showUser(User $user)
     {
+        //dump($user);die;
         return $user;  
+        //return $this->handleView($this->view($user));
     }
 
     /**
      *@Delete(
-     *     path = "/api/users/{id}",
+     *     path = "/api/user/{id}",
      *     name = "user_delete",
      *     requirements = {"id"="\d+"}
      * )
      *@View
-     *@IsGranted("ROLE_SUPER_ADMIN")
+     *@IsGranted("ROLE_USER
+     ")
      */
-    public function deleteUser(User $user)
+    public function delete(User $user)
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) 
-        {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($user);
             $entityManager->flush();
         }
 
-        return $user; // je dois retourner un message qui informe que la suppression c'est bien passé.
+        //return $this->redirectToRoute('client_index');
     }
+
+    
 }

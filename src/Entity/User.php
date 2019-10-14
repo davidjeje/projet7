@@ -42,7 +42,8 @@ use Doctrine\Common\Collections\Collection;
  *      "DELETE",
  *      href = @Hateoas\Route(
  *          "user_delete",
- *          absolute = true
+ *          absolute = true,
+ *          parameters = { "id" = "expr(object.getId())" }
  *      )
  * )
  */
