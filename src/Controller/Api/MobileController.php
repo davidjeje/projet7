@@ -34,7 +34,11 @@ class MobileController extends AbstractFOSRestController
      *     name = "mobile_all",
      *     
      * )
-     *@View
+     *@View(
+     *     
+     *     serializerGroups = {"list"},
+     *     statusCode = 200
+     * )
      * 
      *@IsGranted("ROLE_USER")
      * 
@@ -46,14 +50,17 @@ class MobileController extends AbstractFOSRestController
         $songs = $repository->findAll();
         return $this->handleView($this->view($songs));*/
     }
-
     
     /**
     *@Post(
     *   path ="/api/mobiles/", 
     *   name = "mobile_new"
     * )
-    *@View(StatusCode=201)
+    *@View(
+    *     
+    *     serializerGroups = {"list"},
+    *     statusCode = 200
+    * )
     *@ParamConverter("mobile", 
     *converter="fos_rest.request_body", 
     *options=
@@ -107,7 +114,11 @@ class MobileController extends AbstractFOSRestController
      *     name = "mobile_show",
      *     requirements = {"id"="\d+"}
      * )
-     *@View
+     *@View(
+     *     
+     *     serializerGroups = {"details"},
+     *     statusCode = 200
+     * )
      *@IsGranted("ROLE_USER")
      */
     public function getMobile(Mobile $mobile)

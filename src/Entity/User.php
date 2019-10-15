@@ -9,9 +9,7 @@ use Nelmio\ApiDocBundle\Annotation as Doc;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-//use Symfony\Component\Security\Core\User\UserInterface:getRoles;
-//use Symfony\Component\Security\Core\User\UserInterface:getSalt;
-//use Symfony\Component\Security\Core\User\UserInterface:getUsername;
+use JMS\Serializer\Annotation as Serializer;
 
 
 /**
@@ -22,21 +20,25 @@ use Doctrine\Common\Collections\Collection;
  *          "user_show",
  *          absolute = true,
  *          parameters = { "id" = "expr(object.getId())" }
- *      )
+ *      
+ *      ),
+ *  exclusion = @Hateoas\Exclusion(groups = {"details", "list"})
  * )
  * @Hateoas\Relation(
  *      "list",
  *      href = @Hateoas\Route(
  *          "user_all",
  *          absolute = true
- *      )
+ *      ),
+ * exclusion = @Hateoas\Exclusion(groups = {"details", "list"})
  * )
  * @Hateoas\Relation(
  *      "create",
  *      href = @Hateoas\Route(
  *          "user_new",
  *          absolute = true
- *      )
+ *      ),
+ * exclusion = @Hateoas\Exclusion(groups = {"details", "list"})
  * )
  * @Hateoas\Relation(
  *      "DELETE",
@@ -44,7 +46,8 @@ use Doctrine\Common\Collections\Collection;
  *          "user_delete",
  *          absolute = true,
  *          parameters = { "id" = "expr(object.getId())" }
- *      )
+ *      ),
+ * exclusion = @Hateoas\Exclusion(groups = {"details", "list"})
  * )
  */
 
@@ -54,21 +57,25 @@ class User
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *@Serializer\Groups({"list", "details"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *@Serializer\Groups({"list", "details"})
      */
     private $first_name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *@Serializer\Groups({"list", "details"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *@Serializer\Groups({"list", "details"})
      */
     private $email;
 
@@ -79,21 +86,25 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255)
+     *@Serializer\Groups({"details"})
      */
     private $country;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *@Serializer\Groups({"details"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"details"})
      */
     private $adresse;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"details"})
      */
     private $zip_code;
 
@@ -101,6 +112,7 @@ class User
      * @ORM\ManyToOne(targetEntity="App\Entity\Client",
      * inversedBy="user", cascade={"persist"})
      * @ORM\JoinColumn(name="client", referencedColumnName="id")
+     * 
      * 
      */
     private $client;
