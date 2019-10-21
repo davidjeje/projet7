@@ -15,14 +15,16 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *          "mobile_show",
  *          absolute = true,
  *          parameters = { "id" = "expr(object.getId())" }
- *      )
+ *      ),
+ *      exclusion = @Hateoas\Exclusion(groups = {"details", "list"})
  * )
  * @Hateoas\Relation(
  *      "list",
  *      href = @Hateoas\Route(
  *          "mobile_all",
  *          absolute = true
- *      )
+ *      ),
+ *      exclusion = @Hateoas\Exclusion(groups = {"details", "list"})
  * )
  * @Hateoas\Relation(
  *      "self",
@@ -30,21 +32,24 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *          "user_show",
  *          absolute = true,
  *          parameters = { "id" = "expr(object.getId())" }
- *      )
+ *      ),
+ *      exclusion = @Hateoas\Exclusion(groups = {"details", "list"})
  * )
  * @Hateoas\Relation(
  *      "list",
  *      href = @Hateoas\Route(
  *          "user_all",
  *          absolute = true
- *      )
+ *      ),
+ *      exclusion = @Hateoas\Exclusion(groups = {"details", "list"})
  * )
  * @Hateoas\Relation(
  *      "create",
  *      href = @Hateoas\Route(
  *          "user_new",
  *          absolute = true
- *      )
+ *      ),
+ *      exclusion = @Hateoas\Exclusion(groups = {"details", "list"})
  * )
  
  */
@@ -54,76 +59,90 @@ class Mobile
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *@Serializer\Groups({"list", "details"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Serializer\Groups({"list", "details"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"details"})
      */
     private $screen;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"details"})
      */
     private $design;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"details"})
      */
     private $colour;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Serializer\Groups({"details"})
      */
     private $android;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"details"})
      */
     private $processor;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"details"})
      */
     private $ram;
 
     /**
      * @ORM\Column(type="text", length=255)
+     * @Serializer\Groups({"details"})
      */
     private $camera;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Serializer\Groups({"details"})
      */
     private $storage;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Serializer\Groups({"details"})
      */
     private $drums;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"details"})
      */
     private $simCard;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Serializer\Groups({"details"})
      */
     private $compatibility;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"details"})
      */
     private $sav;
 

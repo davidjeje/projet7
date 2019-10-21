@@ -32,7 +32,12 @@ class UserController extends AbstractFOSRestController
      *     path = "/api/users",
      *     name = "user_all",
      *)
-     *@View
+     *@View(
+     *     
+     *     serializerGroups = {"list"},
+     *     statusCode = 200
+     * )
+     *
      *@IsGranted("ROLE_USER")
      */
     public function allUsers(UserRepository $userRepository)
@@ -51,6 +56,11 @@ class UserController extends AbstractFOSRestController
     *{
     *   "validator"={ "groups"="Create" }
     *})
+    *@View(
+    *     
+    *     serializerGroups = {"list"},
+    *     statusCode = 200
+    * )
     *@IsGranted("ROLE_USER")
     */       
     public function addUsers(User $user, ConstraintViolationList $violations)
@@ -94,7 +104,12 @@ class UserController extends AbstractFOSRestController
      *     name = "user_show",
      *     requirements = {"id"="\d+"}
      * )
-     *@View
+     *@Rest\View(
+     *     populateDefaultVars = false,
+     *     serializerGroups = {"details"},
+     *     statusCode = 200
+     * )
+     *
      *@IsGranted("ROLE_USER")
      */
     public function showUser(User $user)
@@ -110,19 +125,15 @@ class UserController extends AbstractFOSRestController
      *     name = "user_delete",
      *     requirements = {"id"="\d+"}
      * )
-     *@View
+     *@View(statusCode= 200)
      *@IsGranted("ROLE_USER
      ")
      */
     public function delete(User $user)
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($user);
-            $entityManager->flush();
-        }
-
-        //return $this->redirectToRoute('client_index');
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($user);
+        $entityManager->flush();        
     }
 
     
