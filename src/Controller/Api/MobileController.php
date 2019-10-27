@@ -25,6 +25,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Swagger\Annotations as SWG;
 
+
 class MobileController extends AbstractFOSRestController
 {
     
@@ -40,15 +41,26 @@ class MobileController extends AbstractFOSRestController
      *     statusCode = 200
      * )
      * 
+     *@SWG\Response(
+     *     response=200,
+     *     description="Returns the list of mobile",
+     *     @Model(type=Mobile::class)
+     * )
+     *@SWG\Parameter(
+     *     name="MobileRepository",
+     *     in="query",
+     *     type="string",
+     *     description="This parameter makes it possible to make a query in the database and 
+     *     retrieve the list of mobiles."
+     * )
+     *@SWG\Tag(name="mobile")
+     *@Security(name="Bearer")
      *@IsGranted("ROLE_USER")
      * 
      */
     public function getMobiles(MobileRepository $mobileRepository)
     {
         return $mobileRepository->findAll();
-        /*$repository = $this->getDoctrine()->getRepository(Song::class);
-        $songs = $repository->findAll();
-        return $this->handleView($this->view($songs));*/
     }
     
     /**
@@ -59,7 +71,7 @@ class MobileController extends AbstractFOSRestController
     *@View(
     *     
     *     serializerGroups = {"list"},
-    *     statusCode = 200
+    *     statusCode = 201
     * )
     *@ParamConverter("mobile", 
     *converter="fos_rest.request_body", 
@@ -67,6 +79,20 @@ class MobileController extends AbstractFOSRestController
     *{
     *   "validator"={ "groups"="Create" }
     *})
+    *@SWG\Response(
+    *     response=201,
+    *     description="Create a new mobile",
+    *     @Model(type=Mobile::class)
+    * )
+    *@SWG\Parameter(
+    *     name="Mobile",
+    *     in="query",
+    *     type="string",
+    *     description="There are two parameters, one is the creation of a mobile entity and 
+    *     the other is an exception that identifies the errors."
+    * )
+    *@SWG\Tag(name="mobile")
+    *@Security(name="Bearer")
     *@IsGranted("ROLE_SUPER_ADMIN")
     *     
     *     
@@ -119,11 +145,55 @@ class MobileController extends AbstractFOSRestController
      *     serializerGroups = {"details"},
      *     statusCode = 200
      * )
+     *@SWG\Response(
+     *     response=200,
+     *     description="Returns the details of mobile",
+     *     @Model(type=Mobile::class)
+     * )
+     *@SWG\Parameter(
+     *     name="Mobile entity",
+     *     in="query",
+     *     type="string",
+     *     description="There are one parameter, a mobile entity who gets a mobile thanks to 
+     *     the id."
+     * )
+     *@SWG\Tag(name="mobile")
+     *@Security(name="Bearer")
      *@IsGranted("ROLE_USER")
      */
     public function getMobile(Mobile $mobile)
     {
         return $mobile;   
+    }
+
+    /**
+     *@Delete(
+     *     path = "/api/mobile/{id}",
+     *     name = "mobile_delete",
+     *     requirements = {"id"="\d+"}
+     * )
+     *@View(statusCode= 200)
+     *@SWG\Response(
+     *     response=200,
+     *     description="Delete a mobile",
+     *     @Model(type=Mobile::class)
+     * )
+     *@SWG\Parameter(
+     *     name="Mobile",
+     *     in="query",
+     *     type="string",
+     *     description="There are one parameter, a mobile entity who delete a mobile thanks 
+     *     to the id."
+     * )
+     *@SWG\Tag(name="mobile_delete")
+     *@Security(name="Bearer")
+     *@IsGranted("ROLE_SUPER_ADMIN")
+     */
+    public function delete(Mobile $mobile)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($mobile);
+        $entityManager->flush();        
     }
 
 }

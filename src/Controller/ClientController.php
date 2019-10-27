@@ -36,27 +36,6 @@ class ClientController extends AbstractFOSRestController
 
 
     /**
-     * @Route("/login", name="app_login")
-     */
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-        return $this->render('login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-    }
-    /**
-     * @Route("/logout", name="app_logout", methods={"GET"})
-     */
-    public function logout()
-    {
-        // controller can be blank: it will never be executed!
-        throw new \Exception('Don\'t forget to activate logout in security.yaml');
-    }
-
-
-    /**
      *@Get(
      *     path = "/api/clients/",
      *     name = "client_all",
@@ -67,7 +46,7 @@ class ClientController extends AbstractFOSRestController
      *@IsGranted("ROLE_SUPER_ADMIN")
      * 
      */
-    public function getClientes(ClientRepository $clientRepository)
+    public function getClients(ClientRepository $clientRepository)
     {
         return $clientRepository->findAll();
     }
@@ -95,7 +74,7 @@ class ClientController extends AbstractFOSRestController
     *     }
     * )
     */  
-    public function addClients(Client $client, ConstraintViolationList $violations)
+    public function addClient(Client $client, ConstraintViolationList $violations)
     {
         //dump($mobile); die;
         /*$errors = $this->get('validator')->validate($mobile);
@@ -155,12 +134,9 @@ class ClientController extends AbstractFOSRestController
      */
     public function delete(Client $client)
     {
-        if ($this->isCsrfTokenValid('delete'.$client->getId(), $request->request->get('_token'))) {
+        
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($client);
             $entityManager->flush();
-        }
-
-        //return $this->redirectToRoute('client_index');
     }
 }

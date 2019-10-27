@@ -5,6 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Hateoas\Configuration\Annotation as Hateoas;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MobileRepository")
@@ -26,32 +29,24 @@ use Hateoas\Configuration\Annotation as Hateoas;
  *      ),
  *      exclusion = @Hateoas\Exclusion(groups = {"details", "list"})
  * )
- * @Hateoas\Relation(
- *      "self",
- *      href = @Hateoas\Route(
- *          "user_show",
- *          absolute = true,
- *          parameters = { "id" = "expr(object.getId())" }
- *      ),
- *      exclusion = @Hateoas\Exclusion(groups = {"details", "list"})
- * )
- * @Hateoas\Relation(
- *      "list",
- *      href = @Hateoas\Route(
- *          "user_all",
- *          absolute = true
- *      ),
- *      exclusion = @Hateoas\Exclusion(groups = {"details", "list"})
- * )
+ *
  * @Hateoas\Relation(
  *      "create",
  *      href = @Hateoas\Route(
- *          "user_new",
+ *          "mobile_new",
  *          absolute = true
  *      ),
  *      exclusion = @Hateoas\Exclusion(groups = {"details", "list"})
  * )
- 
+ * @Hateoas\Relation(
+ *      "DELETE",
+ *      href = @Hateoas\Route(
+ *          "mobile_delete",
+ *          absolute = true,
+ *          parameters = { "id" = "expr(object.getId())" }
+ *      ),
+ * exclusion = @Hateoas\Exclusion(groups = {"details", "list"})
+ * )
  */
 class Mobile
 {
@@ -67,6 +62,7 @@ class Mobile
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Serializer\Groups({"list", "details"})
+     * @SWG\Property(description="The unique identifier of the mobile.")
      */
     private $name;
 
