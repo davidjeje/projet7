@@ -130,14 +130,14 @@ class UserController extends AbstractFOSRestController
         
         return $this->view($user, 
             Response::HTTP_CREATED, 
-            ['Location' => $this->generateUrl('user_new', ['id' => $user->getId(), UrlGeneratorInterface::ABSOLUTE_URL])
+            ['Location' => $this->generateUrl('user_new', ['idd' => $user->getIdd(), UrlGeneratorInterface::ABSOLUTE_URL])
         ]);
        
     }
 
     /**
      *@Get(
-     *     path = "/api/users/{id}",
+     *     path = "/api/users/{idd}",
      *     name = "user_show",
      *     requirements = {"id"="\d+"}
      * )
@@ -177,7 +177,7 @@ class UserController extends AbstractFOSRestController
 
     /**
      *@Delete(
-     *     path = "/api/user/{id}",
+     *     path = "/api/user/{idd}",
      *     name = "user_delete",
      *     requirements = {"id"="\d+"}
      * )

@@ -17,7 +17,7 @@ final class Version20190928233328 extends AbstractMigration
         return '';
     }
 
-    public function up(Schema $schema) : void
+    public function up() : void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
@@ -25,7 +25,7 @@ final class Version20190928233328 extends AbstractMigration
         $this->addSql('ALTER TABLE client ADD roles JSON NOT NULL');
     }
 
-    public function down(Schema $schema) : void
+    public function down() : void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');

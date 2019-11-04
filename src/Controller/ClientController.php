@@ -143,7 +143,7 @@ class ClientController extends AbstractFOSRestController
         
         return $this->view($client, 
             Response::HTTP_CREATED, 
-            ['Location' => $this->generateUrl('client_new', ['id' => $client->getId(), UrlGeneratorInterface::ABSOLUTE_URL])
+            ['Location' => $this->generateUrl('client_new', ['idd' => $client->getIdd(), UrlGeneratorInterface::ABSOLUTE_URL])
         ]);
        
     }
@@ -187,7 +187,7 @@ class ClientController extends AbstractFOSRestController
 
     /**
      *@Get(
-     *     path = "/api/clients/{id}",
+     *     path = "/api/clients/{idd}",
      *     name = "client_show",
      *     requirements = {"id"="\d+"}
      * )
@@ -222,7 +222,7 @@ class ClientController extends AbstractFOSRestController
 
     /**
      *@Delete(
-     *     path = "/api/clients/{id}",
+     *     path = "/api/clients/{idd}",
      *     name = "client_delete",
      *     requirements = {"id"="\d+"}
      * )

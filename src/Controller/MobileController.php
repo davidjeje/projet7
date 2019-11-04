@@ -142,7 +142,7 @@ class MobileController extends AbstractFOSRestController
         
         return $this->view($mobile, 
             Response::HTTP_CREATED, 
-            ['Location' => $this->generateUrl('mobile_new', ['id' => $mobile->getId(), UrlGeneratorInterface::ABSOLUTE_URL])
+            ['Location' => $this->generateUrl('mobile_new', ['idd' => $mobile->getIdd(), UrlGeneratorInterface::ABSOLUTE_URL])
         ]);
        
     }
@@ -150,7 +150,7 @@ class MobileController extends AbstractFOSRestController
     
     /**
      *@Get(
-     *     path = "/api/mobiles/{id}",
+     *     path = "/api/mobiles/{idd}",
      *     name = "mobile_show",
      *     requirements = {"id"="\d+"}
      * )
@@ -187,7 +187,7 @@ class MobileController extends AbstractFOSRestController
 
     /**
      *@Delete(
-     *     path = "/api/mobile/{id}",
+     *     path = "/api/mobile/{idd}",
      *     name = "mobile_delete",
      *     requirements = {"id"="\d+"}
      * )

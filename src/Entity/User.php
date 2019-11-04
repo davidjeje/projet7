@@ -62,7 +62,7 @@ class User
      *@SWG\Property(description="The unique identifier of the user.")
      *@Serializer\Since("1.0")
      */
-    private $id;
+    private $idd;
 
     /**
      *@ORM\Column(type="string", length=255)
@@ -135,9 +135,9 @@ class User
      */
     private $client;
 
-    public function getId(): ?int
+    public function getIdd(): ?int
     {
-        return $this->id;
+        return $this->idd;
     }
 
     public function getFirstName(): ?string

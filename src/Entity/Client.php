@@ -23,7 +23,7 @@ class Client implements UserInterface
      *@SWG\Property(description="The unique identifier of the client.")
      *@Serializer\Since("1.0")
      */
-    private $id;
+    private $idd;
 
     /**
      *@ORM\Column(type="string", length=255)
@@ -78,9 +78,9 @@ class Client implements UserInterface
         $this->user = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getIdd(): ?int
     {
-        return $this->id;
+        return $this->idd;
     }
 
     public function getName(): ?string
