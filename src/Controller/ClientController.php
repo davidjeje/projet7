@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Form\ClientType;
 use App\Repository\ClientRepository;
+use App\Entity\Mobile;
+use App\Form\MobileType;
+use App\Repository\MobileRepository;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
@@ -30,7 +33,6 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Swagger\Annotations as SWG;
 
-
 class ClientController extends AbstractFOSRestController
 {
 
@@ -42,7 +44,21 @@ class ClientController extends AbstractFOSRestController
      *     
      * )
      *@View
-     * 
+     *@Doc\Operation(
+     *     
+     *     summary="get the list of client",
+     *     description="get the list of client",
+     *     @SWG\Response(
+     *     response=200,
+     *     description="Returns the list of client",
+     *     @Model(type=Client::class)),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="Returned when you use bad credentieals"
+     *     )
+     * )
+     *@SWG\Tag(name="client")
+     *@Security(name="Bearer")
      *@IsGranted("ROLE_SUPER_ADMIN")
      * 
      */
@@ -50,8 +66,9 @@ class ClientController extends AbstractFOSRestController
     {
         return $clientRepository->findAll();
     }
+    
 
-        /**
+    /**
     *@Post(
     *   path ="/api/clients/", 
     *   name = "client_new"
@@ -63,6 +80,26 @@ class ClientController extends AbstractFOSRestController
     *{
     *   "validator"={ "groups"="Create" }
     *})
+    * @Doc\Operation(
+    *     
+    *     summary="Add a new client",
+    *     description="Add a new client",
+    *     @SWG\Parameter(
+    *     name="Client, ConstraintViolationList",
+    *     in="body",
+    *     @Model(type=Client::class),
+    *     description="Json object. There are five parameters.",
+    *     required=true),
+    *     @SWG\Response(
+    *     response=201,
+    *     description="Create a new client",
+    *     @Model(type=Client::class)
+    * ),
+    *     @SWG\Response(
+    *         response="401",
+    *         description="Returned when you use bad credentieals"
+    *     )
+    * )
     *@IsGranted("ROLE_USER")
     *     requirements={
     *         {
@@ -72,6 +109,8 @@ class ClientController extends AbstractFOSRestController
     *             "description"="The client unique identifier."
     *         }
     *     }
+    *     @SWG\Tag(name="client")
+    *     @Security(name="Bearer")
     * )
     */  
     public function addClient(Client $client, ConstraintViolationList $violations)
@@ -110,12 +149,70 @@ class ClientController extends AbstractFOSRestController
     }
 
     /**
+    *@Post(
+    *   path ="/api/login_check", 
+    *   name = "login"
+    * )
+    *@View(StatusCode=201)
+    * @Doc\Operation(
+    *     
+    *     summary="Client authentication",
+    *     description="Client connection on the API",
+    *     @SWG\Parameter(
+    *     name="User",
+    *     in="body",
+    *     @Model(type=Client::class, groups={"login"}),
+    *     description="Json object. There are two parameters.",
+    *     required=true),
+    *     @SWG\Response(
+    *     response=201,
+    *     description="Displays the new token.",
+    *     @Model(type=Client::class, groups={"token"})
+    * ),
+    *     @SWG\Response(
+    *         response="401",
+    *         description="Returned when you use bad credentieals"
+    *     )
+    * )
+    *     @SWG\Tag(name="client")
+    *     
+    * )
+    */  
+    public function login()
+    {
+          
+    }
+
+    
+
+    /**
      *@Get(
      *     path = "/api/clients/{id}",
      *     name = "client_show",
      *     requirements = {"id"="\d+"}
      * )
      *@View
+     *@Doc\Operation(
+     *     
+     *     summary="get the details of client",
+     *     description="get the details of client",
+     *     @SWG\Parameter(
+     *     name="Client",
+     *     in="query",
+     *     type="integer",
+     *     description="Json object. There are one parameter, a client entity who gets a
+     *     client thanks to the id.",
+     *     required=true),
+     *     @SWG\Response(
+     *     response=200,
+     *     description="Returns the details of client",
+     *     @Model(type=Client::class)),
+     *     @SWG\Response(
+     *     response="401",
+     *     description="Returned when you use bad credentieals")
+     *) 
+     *@SWG\Tag(name="client")
+     *@Security(name="Bearer")
      *@IsGranted("ROLE_SUPER_ADMIN")
      */
     public function getClient(Client $client)
@@ -130,7 +227,28 @@ class ClientController extends AbstractFOSRestController
      *     requirements = {"id"="\d+"}
      * )
      *@View
+     *@Doc\Operation(
+     *     
+     *     summary="delete of client",
+     *     description="delete of client",
+     *     *@SWG\Parameter(
+     *     name="Client",
+     *     in="query",
+     *     type="integer",
+     *     description="There are one parameter, who delete a client thanks 
+     *     to the id.",
+     *     required=true),
+     *     @SWG\Response(
+     *     response=200,
+     *     description="Delete a client",
+     *     @Model(type=Client::class)),
+     *     @SWG\Response(
+     *     response="401",
+     *     description="Returned when you use bad credentieals")
+     *) 
      *@IsGranted("ROLE_SUPER_ADMIN")
+     *@SWG\Tag(name="client")
+     *@Security(name="Bearer")
      */
     public function delete(Client $client)
     {
