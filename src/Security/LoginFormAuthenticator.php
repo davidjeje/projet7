@@ -81,7 +81,7 @@ abstract class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return $this->passwordEncoder->isPasswordValid($client, $credentials['password']);
     }
 
-    public function onAuthenticationSuccess(Request $request, $providerKey)
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);

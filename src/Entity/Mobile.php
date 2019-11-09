@@ -58,7 +58,7 @@ class Mobile
      *@SWG\Property(description="The unique identifier of the mobile.")
      *@Serializer\Since("1.0")
      */
-    private $idd;
+    private $id;
 
     /**
      *@ORM\Column(type="string", length=255)
@@ -172,9 +172,9 @@ class Mobile
      */
     private $sav;
 
-    public function getIdd(): ?int
+    public function getId(): ?int
     {
-        return $this->idd;
+        return $this->id;
     }
 
     public function getName(): ?string

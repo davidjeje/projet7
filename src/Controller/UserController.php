@@ -44,7 +44,7 @@ class UserController extends AbstractFOSRestController
      *     @SWG\Response(
      *     response=200,
      *     description="Returns the list of user",
-     *     @Model(type=User::class)),
+     *     @Model(type=User::class, groups={"list"})),
      *     @SWG\Response(
      *         response="401",
      *         description="Returned when you use bad credentieals"
@@ -81,15 +81,15 @@ class UserController extends AbstractFOSRestController
     *     summary="Add a new user by the customers",
     *     description="Add a new user by the customers",
     *     @SWG\Parameter(
-    *     name="User, ConstraintViolationList",
+    *     name="First name, Name, Email, Password, Country, City, Adresse, zip code",
     *     in="body",
-    *     @Model(type=User::class),
-    *     description="Json object. There are nine parameters.",
+    *     @Model(type=User::class, groups={"details", "password"}),
+    *     description="Json object. There are eight parameters.",
     *     required=true),
     *     @SWG\Response(
     *     response=201,
-    *     description="Add a new mobile",
-    *     @Model(type=User::class)
+    *     description="Add a new user",
+    *     @Model(type=User::class, groups={"details", "password"})
     * ),
     *     @SWG\Response(
     *         response="401",
@@ -130,14 +130,14 @@ class UserController extends AbstractFOSRestController
         
         return $this->view($user, 
             Response::HTTP_CREATED, 
-            ['Location' => $this->generateUrl('user_new', ['idd' => $user->getIdd(), UrlGeneratorInterface::ABSOLUTE_URL])
+            ['Location' => $this->generateUrl('user_new', ['id' => $user->getId(), UrlGeneratorInterface::ABSOLUTE_URL])
         ]);
        
     }
 
     /**
      *@Get(
-     *     path = "/api/users/{idd}",
+     *     path = "/api/users/{id}",
      *     name = "user_show",
      *     requirements = {"id"="\d+"}
      * )
@@ -150,17 +150,10 @@ class UserController extends AbstractFOSRestController
      *     
      *     summary="get the details of user",
      *     description="get the details of user",
-     *     @SWG\Parameter(
-     *     name="User",
-     *     in="query",
-     *     type="integer",
-     *     description="Json object. There are one parameter, who gets a
-     *     user thanks to the id.",
-     *     required=true),
      *     @SWG\Response(
      *     response=200,
      *     description="Returns the details of user",
-     *     @Model(type=User::class)),
+     *     @Model(type=User::class, groups={"details"})),
      *     @SWG\Response(
      *     response="401",
      *     description="Returned when you use bad credentieals")
@@ -177,7 +170,7 @@ class UserController extends AbstractFOSRestController
 
     /**
      *@Delete(
-     *     path = "/api/user/{idd}",
+     *     path = "/api/user/{id}",
      *     name = "user_delete",
      *     requirements = {"id"="\d+"}
      * )
@@ -186,17 +179,10 @@ class UserController extends AbstractFOSRestController
      *     
      *     summary="Delete the user",
      *     description="Delete the user",
-     *     @SWG\Parameter(
-     *     name="User",
-     *     in="query",
-     *     type="integer",
-     *     description="There are one parameter, who delete a user thanks 
-     *     to the id.",
-     *     required=true),
      *     @SWG\Response(
      *     response=200,
      *     description="Delete a user",
-     *     @Model(type=User::class)),
+     *     @Model(type=User::class, groups={"details"})),
      *     @SWG\Response(
      *     response="401",
      *     description="Returned when you use bad credentieals")

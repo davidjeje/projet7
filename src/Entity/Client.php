@@ -22,13 +22,15 @@ class Client implements UserInterface
      *@ORM\Column(type="integer")
      *@SWG\Property(description="The unique identifier of the client.")
      *@Serializer\Since("1.0")
+     *@Serializer\Groups({"list"})
      */
-    private $idd;
+    private $id;
 
     /**
      *@ORM\Column(type="string", length=255)
      *@SWG\Property(description="Name of new client.", example="Dupont")
      *@Serializer\Since("1.0")
+     *@Serializer\Groups({"list"})
      */
     private $name;
 
@@ -36,6 +38,7 @@ class Client implements UserInterface
      *@ORM\Column(type="string", length=255)
      *@SWG\Property(description="Email of new client.", example="GerardDupont@gmail.fr")
      *@Serializer\Since("1.0")
+     *@Serializer\Groups({"list"})
      */
     private $email;
 
@@ -57,19 +60,23 @@ class Client implements UserInterface
      *@ORM\Column(type="string", length=255)
      *@SWG\Property(description="Password of new client.", example="GerardDupont")
      *@Serializer\Since("1.0")
-     *@Serializer\Groups({"login"})
+     *@Serializer\Groups({"login", "add"})
      */
     private $password;
 
     /**
      *@ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="client", cascade={"persist"})
      *@Serializer\Since("1.0")
+     *@SWG\Property(description="Customer users.", example="Customer users GerardDupont *number 1 = Maxime")
+     *@Serializer\Groups({"list"})
      */
     private $user;
 
     /**
      *@ORM\Column(type="json")
      *@Serializer\Since("1.0")
+     *@SWG\Property(description="Customers role.", example="Customer role ROLE_SUPER_ADMIN *or ROLE_USER.")
+     *@Serializer\Groups({"add", "list"})
      */
     private $roles = [];
 
@@ -78,9 +85,9 @@ class Client implements UserInterface
         $this->user = new ArrayCollection();
     }
 
-    public function getIdd(): ?int
+    public function getId(): ?int
     {
-        return $this->idd;
+        return $this->id;
     }
 
     public function getName(): ?string
@@ -190,5 +197,15 @@ class Client implements UserInterface
     public function eraseCredentials()
     {
         return null;
+    }
+
+    public function getRealUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
     }
 }

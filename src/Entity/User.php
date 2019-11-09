@@ -62,7 +62,7 @@ class User
      *@SWG\Property(description="The unique identifier of the user.")
      *@Serializer\Since("1.0")
      */
-    private $idd;
+    private $id;
 
     /**
      *@ORM\Column(type="string", length=255)
@@ -92,6 +92,7 @@ class User
      *@ORM\Column(type="string", length=255)
      *@SWG\Property(description="Password of new user.", example="GerardDupont")
      *@Serializer\Since("1.0")
+     *@Serializer\Groups({"password"})
      */
     private $password;
 
@@ -110,6 +111,7 @@ class User
      *@Serializer\Since("1.0")
      */
     private $city;
+
 
     /**
      *@ORM\Column(type="string", length=255)
@@ -132,12 +134,14 @@ class User
      *inversedBy="user", cascade={"persist"})
      *@ORM\JoinColumn(name="client", referencedColumnName="id")
      *@Serializer\Since("1.0") 
+     *@SWG\Property(description="Users customer.", example="Users customer Maxime number 1 = *GerardDupont")
+     *@Serializer\Groups({"details"})
      */
     private $client;
 
-    public function getIdd(): ?int
+    public function getId(): ?int
     {
-        return $this->idd;
+        return $this->id;
     }
 
     public function getFirstName(): ?string

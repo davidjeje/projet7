@@ -53,7 +53,7 @@ class MobileController extends AbstractFOSRestController
      *     @SWG\Response(
      *     response=200,
      *     description="Returns the list of mobile",
-     *     @Model(type=Mobile::class)),
+     *     @Model(type=Mobile::class, groups={"list"})),
      *     @SWG\Response(
      *         response="401",
      *         description="Returned when you use bad credentieals"
@@ -68,6 +68,7 @@ class MobileController extends AbstractFOSRestController
     {
         return $mobileRepository->findAll();
     }
+
     
     /**
     *@Post(
@@ -90,15 +91,15 @@ class MobileController extends AbstractFOSRestController
     *     summary="Create a new mobile for the customers",
     *     description="Create a new mobile for the customers",
     *     @SWG\Parameter(
-    *     name="Mobile",
+    *     name="Name, Screen, Design, Colour, Android, Processor, Ram, Camera, Storage, *     Drums, Sim Card, Compatibility, SAV",
     *     in="body",
-    *     @Model(type=Mobile::class),
-    *     description="Json object. There are nine parameters.",
+    *     @Model(type=Mobile::class, groups={"details"}),
+    *     description="Json object. There are thirteen parameters.",
     *     required=true),
     *     @SWG\Response(
     *     response=201,
     *     description="Create a new mobile",
-    *     @Model(type=Mobile::class)
+    *     @Model(type=Mobile::class, groups={"details"})
     * ),
     *     @SWG\Response(
     *         response="401",
@@ -142,7 +143,7 @@ class MobileController extends AbstractFOSRestController
         
         return $this->view($mobile, 
             Response::HTTP_CREATED, 
-            ['Location' => $this->generateUrl('mobile_new', ['idd' => $mobile->getIdd(), UrlGeneratorInterface::ABSOLUTE_URL])
+            ['Location' => $this->generateUrl('mobile_new', ['id' => $mobile->getId(), UrlGeneratorInterface::ABSOLUTE_URL])
         ]);
        
     }
@@ -150,7 +151,7 @@ class MobileController extends AbstractFOSRestController
     
     /**
      *@Get(
-     *     path = "/api/mobiles/{idd}",
+     *     path = "/api/mobiles/{id}",
      *     name = "mobile_show",
      *     requirements = {"id"="\d+"}
      * )
@@ -162,12 +163,6 @@ class MobileController extends AbstractFOSRestController
      *     
      *     summary="get the details of mobile phones",
      *     description="get the details of mobile phones",
-     *     @SWG\Parameter(
-     *     name="id",
-     *     in="query",
-     *     type="integer",
-     *     description="The article unique identifier.",
-     *     required=true),
      *     @SWG\Response(
      *     response=200,
      *     description="Returns the details of mobile",
@@ -185,9 +180,10 @@ class MobileController extends AbstractFOSRestController
         return $mobile;   
     }
 
+
     /**
      *@Delete(
-     *     path = "/api/mobile/{idd}",
+     *     path = "/api/mobile/{id}",
      *     name = "mobile_delete",
      *     requirements = {"id"="\d+"}
      * )
@@ -196,13 +192,6 @@ class MobileController extends AbstractFOSRestController
      *     
      *     summary="delete the mobile phones",
      *     description="delete the mobile phones",
-     *     *@SWG\Parameter(
-     *     name="Mobile",
-     *     in="query",
-     *     type="integer",
-     *     description="There are one parameter, who delete a mobile thanks 
-     *     to the id.",
-     *     required=true),
      *     @SWG\Response(
      *     response=200,
      *     description="Delete a mobile",
@@ -221,5 +210,6 @@ class MobileController extends AbstractFOSRestController
         $entityManager->remove($mobile);
         $entityManager->flush();        
     }
+
 
 }
