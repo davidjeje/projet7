@@ -37,23 +37,24 @@ class UserController extends AbstractFOSRestController
      *     serializerGroups = {"list"},
      *     statusCode = 200
      * )
-     *@SWG\Response(
+     *@Doc\Operation(
+     *     
+     *     summary="get the list of user",
+     *     description="get the list of user",
+     *     @SWG\Response(
      *     response=200,
-     *     description="Returns the list of users",
-     *     @Model(type=User::class)
+     *     description="Returns the list of user",
+     *     @Model(type=User::class, groups={"list"})),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="Returned when you use bad credentieals"
+     *     )
      * )
-     *@SWG\Parameter(
-     *     name="UserRepository",
-     *     in="query",
-     *     type="string",
-     *     description="This parameter makes it possible to make a query in the database and 
-     *     retrieve the list of users."
-     * )
-     *@SWG\Tag(name="user_all")
+     *@SWG\Tag(name="user")
      *@Security(name="Bearer")
-     *
      *@IsGranted("ROLE_USER")
      */
+
     public function allUsers(UserRepository $userRepository)
     {
         return  $userRepository->findAll();    
@@ -75,19 +76,27 @@ class UserController extends AbstractFOSRestController
     *     serializerGroups = {"list"},
     *     statusCode = 201
     * )
-    *@SWG\Response(
+    * @Doc\Operation(
+    *     
+    *     summary="Add a new user by the customers",
+    *     description="Add a new user by the customers",
+    *     @SWG\Parameter(
+    *     name="First name, Name, Email, Password, Country, City, Adresse, zip code",
+    *     in="body",
+    *     @Model(type=User::class, groups={"details", "password"}),
+    *     description="Json object. There are eight parameters.",
+    *     required=true),
+    *     @SWG\Response(
     *     response=201,
     *     description="Add a new user",
-    *     @Model(type=User::class)
+    *     @Model(type=User::class, groups={"details", "password"})
+    * ),
+    *     @SWG\Response(
+    *         response="401",
+    *         description="Returned when you use bad credentieals"
+    *     )
     * )
-    *@SWG\Parameter(
-    *     name="user",
-    *     in="query",
-    *     type="string",
-    *     description="There are two parameters, one is the creation of a user entity and 
-    *     the other is an exception that identifies the errors."
-    * )
-    *@SWG\Tag(name="user_new")
+    *@SWG\Tag(name="user")
     *@Security(name="Bearer")
     *@IsGranted("ROLE_USER")
     */       
@@ -137,19 +146,19 @@ class UserController extends AbstractFOSRestController
      *     serializerGroups = {"details"},
      *     statusCode = 200
      * )
-     *@SWG\Response(
+     *@Doc\Operation(
+     *     
+     *     summary="get the details of user",
+     *     description="get the details of user",
+     *     @SWG\Response(
      *     response=200,
-     *     description="Returns the details of users",
-     *     @Model(type=User::class)
-     * )
-     *@SWG\Parameter(
-     *     name="User",
-     *     in="query",
-     *     type="string",
-     *     description="There are one parameter, a user entity who gets a user thanks to 
-     *     the id."
-     * )
-     *@SWG\Tag(name="user_show")
+     *     description="Returns the details of user",
+     *     @Model(type=User::class, groups={"details"})),
+     *     @SWG\Response(
+     *     response="401",
+     *     description="Returned when you use bad credentieals")
+     *) 
+     *@SWG\Tag(name="user")
      *@Security(name="Bearer")
      *
      *@IsGranted("ROLE_USER")
@@ -166,19 +175,19 @@ class UserController extends AbstractFOSRestController
      *     requirements = {"id"="\d+"}
      * )
      *@View(statusCode= 200)
-     *@SWG\Response(
+     *@Doc\Operation(
+     *     
+     *     summary="Delete the user",
+     *     description="Delete the user",
+     *     @SWG\Response(
      *     response=200,
      *     description="Delete a user",
-     *     @Model(type=User::class)
-     * )
-     *@SWG\Parameter(
-     *     name="User",
-     *     in="query",
-     *     type="string",
-     *     description="There are one parameter, a user entity who delete a user thanks 
-     *     to the id."
-     * )
-     *@SWG\Tag(name="user_delete")
+     *     @Model(type=User::class, groups={"details"})),
+     *     @SWG\Response(
+     *     response="401",
+     *     description="Returned when you use bad credentieals")
+     *) 
+     *@SWG\Tag(name="user")
      *@Security(name="Bearer")
      *@IsGranted("ROLE_USER")
      */

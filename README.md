@@ -26,13 +26,13 @@ Here are the commands to install Composer on our computer. We can install it the
 Then quickly check that PHP and Composer are available in your command prompt:
 
     php -v
-    composer –version
+    php composer.phar –version
 
 > Installation:
 
     git clone  https://github.com/davidjeje/projet6
-    cd projet6
-    composer install
+    cd projet7
+    php composer.phar install
 
 ## Before Starting the application 
 

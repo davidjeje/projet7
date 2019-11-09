@@ -50,7 +50,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         );
         return $credentials;
     }
-    public function getUser($credentials, UserProviderInterface $userProvider)
+    public function getUser($credentials)
     {
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
         if (!$this->csrfTokenManager->isTokenValid($token)) {
@@ -67,7 +67,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+    public function onAuthenticationSuccess(Request $request, $providerKey)
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);

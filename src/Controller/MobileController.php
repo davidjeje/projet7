@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller;
 
 use App\Entity\Mobile;
 use App\Form\MobileType;
 use App\Repository\MobileRepository;
+use App\Entity\Client;
+use App\Form\ClientType;
+use App\Repository\ClientRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,6 +32,7 @@ use Swagger\Annotations as SWG;
 class MobileController extends AbstractFOSRestController
 {
     
+    
     /**
      *@Get(
      *     path = "/api/mobiles/",
@@ -41,17 +45,19 @@ class MobileController extends AbstractFOSRestController
      *     statusCode = 200
      * )
      * 
-     *@SWG\Response(
+     *@Doc\Operation(
+     *     
+     *     summary="get the list of mobile phones",
+     *     description="get the list of mobile phones",
+     *     
+     *     @SWG\Response(
      *     response=200,
      *     description="Returns the list of mobile",
-     *     @Model(type=Mobile::class)
-     * )
-     *@SWG\Parameter(
-     *     name="MobileRepository",
-     *     in="query",
-     *     type="string",
-     *     description="This parameter makes it possible to make a query in the database and 
-     *     retrieve the list of mobiles."
+     *     @Model(type=Mobile::class, groups={"list"})),
+     *     @SWG\Response(
+     *         response="401",
+     *         description="Returned when you use bad credentieals"
+     *     )
      * )
      *@SWG\Tag(name="mobile")
      *@Security(name="Bearer")
@@ -62,6 +68,7 @@ class MobileController extends AbstractFOSRestController
     {
         return $mobileRepository->findAll();
     }
+
     
     /**
     *@Post(
@@ -69,7 +76,7 @@ class MobileController extends AbstractFOSRestController
     *   name = "mobile_new"
     * )
     *@View(
-    *     
+    *     populateDefaultVars = false,
     *     serializerGroups = {"list"},
     *     statusCode = 201
     * )
@@ -79,17 +86,25 @@ class MobileController extends AbstractFOSRestController
     *{
     *   "validator"={ "groups"="Create" }
     *})
-    *@SWG\Response(
+    * @Doc\Operation(
+    *     
+    *     summary="Create a new mobile for the customers",
+    *     description="Create a new mobile for the customers",
+    *     @SWG\Parameter(
+    *     name="Name, Screen, Design, Colour, Android, Processor, Ram, Camera, Storage, *     Drums, Sim Card, Compatibility, SAV",
+    *     in="body",
+    *     @Model(type=Mobile::class, groups={"details"}),
+    *     description="Json object. There are thirteen parameters.",
+    *     required=true),
+    *     @SWG\Response(
     *     response=201,
     *     description="Create a new mobile",
-    *     @Model(type=Mobile::class)
-    * )
-    *@SWG\Parameter(
-    *     name="Mobile",
-    *     in="query",
-    *     type="string",
-    *     description="There are two parameters, one is the creation of a mobile entity and 
-    *     the other is an exception that identifies the errors."
+    *     @Model(type=Mobile::class, groups={"details"})
+    * ),
+    *     @SWG\Response(
+    *         response="401",
+    *         description="Returned when you use bad credentieals"
+    *     )
     * )
     *@SWG\Tag(name="mobile")
     *@Security(name="Bearer")
@@ -140,23 +155,22 @@ class MobileController extends AbstractFOSRestController
      *     name = "mobile_show",
      *     requirements = {"id"="\d+"}
      * )
-     *@View(
-     *     
+     *@View( 
      *     serializerGroups = {"details"},
      *     statusCode = 200
      * )
-     *@SWG\Response(
+     *@Doc\Operation(
+     *     
+     *     summary="get the details of mobile phones",
+     *     description="get the details of mobile phones",
+     *     @SWG\Response(
      *     response=200,
      *     description="Returns the details of mobile",
-     *     @Model(type=Mobile::class)
-     * )
-     *@SWG\Parameter(
-     *     name="Mobile entity",
-     *     in="query",
-     *     type="string",
-     *     description="There are one parameter, a mobile entity who gets a mobile thanks to 
-     *     the id."
-     * )
+     *     @Model(type=Mobile::class)),
+     *     @SWG\Response(
+     *     response="401",
+     *     description="Returned when you use bad credentieals")
+     *) 
      *@SWG\Tag(name="mobile")
      *@Security(name="Bearer")
      *@IsGranted("ROLE_USER")
@@ -166,6 +180,7 @@ class MobileController extends AbstractFOSRestController
         return $mobile;   
     }
 
+
     /**
      *@Delete(
      *     path = "/api/mobile/{id}",
@@ -173,19 +188,19 @@ class MobileController extends AbstractFOSRestController
      *     requirements = {"id"="\d+"}
      * )
      *@View(statusCode= 200)
-     *@SWG\Response(
+     *@Doc\Operation(
+     *     
+     *     summary="delete the mobile phones",
+     *     description="delete the mobile phones",
+     *     @SWG\Response(
      *     response=200,
      *     description="Delete a mobile",
-     *     @Model(type=Mobile::class)
-     * )
-     *@SWG\Parameter(
-     *     name="Mobile",
-     *     in="query",
-     *     type="string",
-     *     description="There are one parameter, a mobile entity who delete a mobile thanks 
-     *     to the id."
-     * )
-     *@SWG\Tag(name="mobile_delete")
+     *     @Model(type=Mobile::class)),
+     *     @SWG\Response(
+     *     response="401",
+     *     description="Returned when you use bad credentieals")
+     *) 
+     *@SWG\Tag(name="mobile")
      *@Security(name="Bearer")
      *@IsGranted("ROLE_SUPER_ADMIN")
      */
@@ -195,5 +210,6 @@ class MobileController extends AbstractFOSRestController
         $entityManager->remove($mobile);
         $entityManager->flush();        
     }
+
 
 }

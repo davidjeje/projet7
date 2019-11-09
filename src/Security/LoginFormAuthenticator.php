@@ -59,7 +59,7 @@ abstract class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return $credentials;
     }
 
-    public function getClient($credentials, UserProviderInterface $userProvider)
+    public function getClient($credentials)
     {
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
         if (!$this->csrfTokenManager->isTokenValid($token)) {

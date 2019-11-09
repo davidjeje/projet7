@@ -1,0 +1,23 @@
+nelmio_api_doc:
+  areas:
+    path_patterns: # an array of regexps
+      - ^/api(?!/doc*$)
+
+  documentation:
+    schemes: [http]
+    info:
+      title: BileMo backend API
+      description: All neccessary Endpoints for BileMo
+      version: 1.0
+
+    securityDefinitions:
+      Bearer:
+        type: apiKey
+        description: 'Value: Bearer {jwt}'
+        name: Authorization
+        in: header
+      security:
+        - Bearer: []
+
+    cache:
+        enabled: true
