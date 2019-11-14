@@ -151,7 +151,7 @@ class MobileController extends AbstractFOSRestController
     
     /**
      *@Get(
-     *     path = "/api/mobiles/{id}",
+     *     path = "/api/mobiles/{id}/",
      *     name = "mobile_show",
      *     requirements = {"id"="\d+"}
      * )
@@ -183,7 +183,7 @@ class MobileController extends AbstractFOSRestController
 
     /**
      *@Delete(
-     *     path = "/api/mobile/{id}",
+     *     path = "/api/mobile/{id}/",
      *     name = "mobile_delete",
      *     requirements = {"id"="\d+"}
      * )

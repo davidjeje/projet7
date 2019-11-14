@@ -105,7 +105,7 @@ class ClientController extends AbstractFOSRestController
     *         description="Returned when you use bad credentieals"
     *     )
     * )
-    *@IsGranted("ROLE_SUPER_ADMIN")
+    *@IsGranted("ROLE_USER")
     *     requirements={
     *         {
     *             "name"="id",
@@ -155,7 +155,7 @@ class ClientController extends AbstractFOSRestController
 
     /**
     *@Post(
-    *   path ="/api/login_check", 
+    *   path ="/api/login_check/", 
     *   name = "login"
     * )
     *@View(StatusCode=201)
@@ -211,7 +211,7 @@ class ClientController extends AbstractFOSRestController
      *) 
      *@SWG\Tag(name="client")
      *@Security(name="Bearer")
-     *@IsGranted("ROLE_SUPER_ADMIN")
+     *@IsGranted("ROLE_USER")
      */
     public function getClient(Client $client)
     {
@@ -237,7 +237,7 @@ class ClientController extends AbstractFOSRestController
      *     response="401",
      *     description="Returned when you use bad credentieals")
      *) 
-     *@IsGranted("ROLE_SUPER_ADMIN")
+     *@IsGranted("ROLE_USER")
      *@SWG\Tag(name="client")
      *@Security(name="Bearer")
      */
