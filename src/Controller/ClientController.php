@@ -36,7 +36,6 @@ use Swagger\Annotations as SWG;
 class ClientController extends AbstractFOSRestController
 {
 
-
     /**
      *@Get(
      *     path = "/api/clients/",
@@ -64,7 +63,7 @@ class ClientController extends AbstractFOSRestController
      * )
      *@SWG\Tag(name="client")
      *@Security(name="Bearer")
-     *@IsGranted("ROLE_USER")
+     *@IsGranted("ROLE_SUPER_ADMIN")
      * 
      */
     public function getClients(ClientRepository $clientRepository)
@@ -192,7 +191,7 @@ class ClientController extends AbstractFOSRestController
 
     /**
      *@Get(
-     *     path = "/api/clients/{id}",
+     *     path = "/api/clients/{id}/",
      *     name = "client_show",
      *     requirements = {"id"="\d+"}
      * )
@@ -220,7 +219,7 @@ class ClientController extends AbstractFOSRestController
 
     /**
      *@Delete(
-     *     path = "/api/clients/{id}",
+     *     path = "/api/clients/{id}/",
      *     name = "client_delete",
      *     requirements = {"id"="\d+"}
      * )
@@ -237,7 +236,7 @@ class ClientController extends AbstractFOSRestController
      *     response="401",
      *     description="Returned when you use bad credentieals")
      *) 
-     *@IsGranted("ROLE_SUPER_ADMIN")
+     *@IsGranted("ROLE_USER")
      *@SWG\Tag(name="client")
      *@Security(name="Bearer")
      */

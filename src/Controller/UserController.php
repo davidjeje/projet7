@@ -29,7 +29,7 @@ class UserController extends AbstractFOSRestController
 {
     /**
      *@Get(
-     *     path = "/api/users",
+     *     path = "/api/users/",
      *     name = "user_all",
      *)
      *@View(
@@ -137,7 +137,7 @@ class UserController extends AbstractFOSRestController
 
     /**
      *@Get(
-     *     path = "/api/users/{id}",
+     *     path = "/api/users/{id}/",
      *     name = "user_show",
      *     requirements = {"id"="\d+"}
      * )
@@ -170,7 +170,7 @@ class UserController extends AbstractFOSRestController
 
     /**
      *@Delete(
-     *     path = "/api/user/{id}",
+     *     path = "/api/user/{id}/",
      *     name = "user_delete",
      *     requirements = {"id"="\d+"}
      * )
