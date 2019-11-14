@@ -12,7 +12,6 @@ use Doctrine\Common\Collections\Collection;
 use JMS\Serializer\Annotation as Serializer;
 use Swagger\Annotations as SWG;
 
-
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @Hateoas\Relation(

@@ -81,11 +81,7 @@ class MobileController extends AbstractFOSRestController
     *     statusCode = 201
     * )
     *@ParamConverter("mobile", 
-    *converter="fos_rest.request_body", 
-    *options=
-    *{
-    *   "validator"={ "groups"="Create" }
-    *})
+    *converter="fos_rest.request_body")
     * @Doc\Operation(
     *     
     *     summary="Create a new mobile for the customers",
@@ -108,7 +104,7 @@ class MobileController extends AbstractFOSRestController
     * )
     *@SWG\Tag(name="mobile")
     *@Security(name="Bearer")
-    *@IsGranted("ROLE_SUPER_ADMIN")
+    *@IsGranted("ROLE_USER")
     *     
     *     
     * )
@@ -123,11 +119,11 @@ class MobileController extends AbstractFOSRestController
             return $this->view($errors, Response::HTTP_BAD_REQUEST);
         }*/
 
-        if (count($violations)) 
+        /*if (count($violations)) 
         {
             return $this->view($violations, Response::HTTP_BAD_REQUEST);
-        }
-        /*if (count($violations)) 
+        }*/
+        if (count($violations)) 
         {
             $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';
             foreach ($violations as $violation) 
@@ -136,7 +132,7 @@ class MobileController extends AbstractFOSRestController
             }
 
             throw new ResourceValidationException($message);
-        }*/
+        }
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($mobile);
         $entityManager->flush();

@@ -63,6 +63,12 @@ class Mobile
     /**
      *@ORM\Column(type="string", length=255)
      *@Assert\NotBlank
+     *@Assert\Length(
+     *      min = 3,
+     *      max = 70,
+     *      minMessage = "Your title must be at least 3 characters long",
+     *      maxMessage = "Your title cannot be longer than 70 characters"
+     * )
      *@Serializer\Groups({"list", "details"})
      *@SWG\Property(description="Name of new mobile.", example="Samsumg, iphone *etc...")
      *@Serializer\Since("1.0")
