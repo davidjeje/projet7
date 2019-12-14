@@ -24,6 +24,7 @@ use Nelmio\ApiDocBundle\Annotation as Doc;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Swagger\Annotations as SWG;
+use FOS\RestBundle\Request\ParamFetcherInterface;
 
 class UserController extends AbstractFOSRestController
 {
@@ -32,6 +33,30 @@ class UserController extends AbstractFOSRestController
      *     path = "/api/users/",
      *     name = "user_all",
      *)
+     * @Rest\QueryParam(
+     *     name="keyword",
+     *     requirements="[a-zA-Z0-9]",
+     *     nullable=true,
+     *     description="The keyword to search for."
+     * )
+     * @Rest\QueryParam(
+     *     name="order",
+     *     requirements="asc|desc",
+     *     default="asc",
+     *     description="Sort order (asc or desc)"
+     * )
+     * @Rest\QueryParam(
+     *     name="limit",
+     *     requirements="\d+",
+     *     default="2",
+     *     description="Max number of movies per page."
+     * )
+     * @Rest\QueryParam(
+     *     name="offset",
+     *     requirements="\d+",
+     *     default="0",
+     *     description="The pagination offsetTo go to page number 2, you must type ?Offset *     = 2 in the url. To go to page number 3, note in the url? Offset = 5 in the url."
+     * )
      *@View(
      *     
      *     serializerGroups = {"list"},
@@ -55,9 +80,16 @@ class UserController extends AbstractFOSRestController
      *@IsGranted("ROLE_USER")
      */
 
-    public function allUsers(UserRepository $userRepository)
+    public function allUsers(UserRepository $userRepository, ParamFetcherInterface $paramFetcher, Request $request)
     {
-        return  $userRepository->findAll();    
+        $pager = $userRepository->search(
+            $paramFetcher->get('keyword'),
+            $paramFetcher->get('order'),
+            $paramFetcher->get('limit'),
+            $paramFetcher->get('offset')
+        );
+        
+        return $pager;    
     }
 
     /**

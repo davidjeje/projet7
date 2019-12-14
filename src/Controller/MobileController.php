@@ -27,17 +27,39 @@ use Nelmio\ApiDocBundle\Annotation as Doc;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Swagger\Annotations as SWG;
-
+use FOS\RestBundle\Request\ParamFetcherInterface;
 
 class MobileController extends AbstractFOSRestController
-{
-    
-    
+{   
     /**
      *@Get(
      *     path = "/api/mobiles/",
      *     name = "mobile_all",
      *     
+     * )
+     * @Rest\QueryParam(
+     *     name="keyword",
+     *     requirements="[a-zA-Z0-9]",
+     *     nullable=true,
+     *     description="The keyword to search for."
+     * )
+     * @Rest\QueryParam(
+     *     name="order",
+     *     requirements="asc|desc",
+     *     default="asc",
+     *     description="Sort order (asc or desc)"
+     * )
+     * @Rest\QueryParam(
+     *     name="limit",
+     *     requirements="\d+",
+     *     default="2",
+     *     description="Max number of mobiles per page."
+     * )
+     * @Rest\QueryParam(
+     *     name="offset",
+     *     requirements="\d+",
+     *     default="0",
+     *     description="The pagination offset. To go to page number 2, you must type ?Offset *     = 2 in the url. To go to page number 3, note in the url? Offset = 5 in the url."
      * )
      *@View(
      *     
@@ -64,12 +86,19 @@ class MobileController extends AbstractFOSRestController
      *@IsGranted("ROLE_USER")
      * 
      */
-    public function getMobiles(MobileRepository $mobileRepository)
-    {
-        return $mobileRepository->findAll();
+    public function getMobiles(MobileRepository $mobileRepository, ParamFetcherInterface $paramFetcher, Request $request)
+    { 
+        $pager = $mobileRepository->search(
+            $paramFetcher->get('keyword'),
+            $paramFetcher->get('order'),
+            $paramFetcher->get('limit'),
+            $paramFetcher->get('offset')
+        );
+        
+        return $pager;
+       
     }
 
-    
     /**
     *@Post(
     *   path ="/api/mobiles/", 
@@ -111,18 +140,7 @@ class MobileController extends AbstractFOSRestController
     */  
     public function createMobiles(Mobile $mobile, ConstraintViolationList $violations)
     {
-        //dump($mobile); die;
-        /*$errors = $this->get('validator')->validate($mobile);
-
-        if (count($errors)) 
-        {
-            return $this->view($errors, Response::HTTP_BAD_REQUEST);
-        }*/
-
-        /*if (count($violations)) 
-        {
-            return $this->view($violations, Response::HTTP_BAD_REQUEST);
-        }*/
+       
         if (count($violations)) 
         {
             $message = 'The JSON sent contains invalid data. Here are the errors you need to correct: ';

@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Mobile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use PagerFanta\Adapater\DoctrineORMAdapter;
+use PagerFanta\Pagerfanta;
 
 /**
  * @method Mobile|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,39 +14,28 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Mobile[]    findAll()
  * @method Mobile[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MobileRepository extends ServiceEntityRepository
+class MobileRepository extends AbstractRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Mobile::class);
     }
 
-    // /**
-    //  * @return Mobile[] Returns an array of Mobile objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function search($term, $order = 'asc', $limit = 20, $offset = 0)
     {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        $qb = $this
+            ->createQueryBuilder('a')
+            ->select('a')
+            ->orderBy('a.name', $order)
         ;
+        
+        if ($term) {
+            $qb
+                ->where('a.name LIKE ?1')
+                ->setParameter(1, '%'.$term.'%')
+            ;
+        }
+        
+        return $this->paginate($qb, $limit, $offset);
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Mobile
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

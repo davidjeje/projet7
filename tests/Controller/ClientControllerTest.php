@@ -46,9 +46,19 @@ class ClientControllerTest extends WebTestCase
     public function testLoginClient()
     {
         $client = static::createClient();
-        $crawler = $client->request('POST', '/api/login_check/');
+        $crawler = $client->request('POST', '/api/login_check');
+        $data = json_encode(['username' => "user@attineos.com", 'password' => 'user']);
+        $client->request
+        (
+            'POST',
+            '/api/login_check',
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            $data
+        );
         // Premier test
-        $this->assertEquals(201, $client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
         //Deuxième test
         // asserts that the "Content-Type" header is "application/json"
         $this->assertTrue
@@ -67,7 +77,7 @@ class ClientControllerTest extends WebTestCase
         //Quatrième test: asserts a specific 201 status code
         $this->assertEquals
         (
-            201, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
+            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
             $client->getResponse()->getStatusCode()
         );
 
@@ -94,7 +104,6 @@ class ClientControllerTest extends WebTestCase
             ['CONTENT_TYPE' => 'application/json'],
             '{"username":"user@attineos.com"}'
         );
-
 
     }
 

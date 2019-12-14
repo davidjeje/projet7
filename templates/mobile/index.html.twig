@@ -44,7 +44,7 @@
                 <td>{{ mobile.sav }}</td>
                 <td>
                     <a href="{{ path('mobile_show', {'id': mobile.id}) }}">show</a>
-                    <a href="{{ path('mobile_edit', {'id': mobile.id}) }}">edit</a>
+                    
                 </td>
             </tr>
         {% else %}
@@ -56,4 +56,9 @@
     </table>
 
     <a href="{{ path('mobile_new') }}">Create new</a>
+
+     {# display navigation #} 
+    < div  class = " navigation " >
+        {{knp_pagination_render ( pagination )}}
+    </ div >
 {% endblock %}
