@@ -8,6 +8,8 @@ use Hateoas\Configuration\Annotation as Hateoas;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use JMS\Serializer\Annotation as Serializer;
+use PagerFanta\Adapater\DoctrineORMAdapter;
+use PagerFanta\Pagerfanta;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\MobileRepository")
@@ -69,6 +71,7 @@ class Mobile
      *      minMessage = "Your title must be at least 3 characters long",
      *      maxMessage = "Your title cannot be longer than 70 characters"
      * )
+
      *@Serializer\Groups({"list", "details"})
      *@SWG\Property(description="Name of new mobile.", example="Samsumg, iphone *etc...")
      *@Serializer\Since("1.0")
